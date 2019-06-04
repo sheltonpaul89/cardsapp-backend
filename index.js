@@ -24,8 +24,10 @@ const init = async () => {
         info: {
                 title: 'CardsApp API Documentation',
                 version: Pack.version,
-            },
-            grouping:'tags'
+            },  
+            grouping:'tags',
+            cors: true,
+            host: '35.200.142.1'
         };
 
     await server.register([
