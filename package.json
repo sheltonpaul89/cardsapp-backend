@@ -1,0 +1,31 @@
+{
+  "name": "cardsapp-backend",
+  "version": "1.0.0",
+  "description": "Backend Service for CardsApp",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sheltonpaul89/cardsapp-backend.git"
+  },
+  "author": "Micheal Janet",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sheltonpaul89/cardsapp-backend/issues"
+  },
+  "homepage": "https://github.com/sheltonpaul89/cardsapp-backend#readme",
+  "dependencies": {
+    "@hapi/hapi": "^18.3.1",
+    "@hapi/inert": "^5.2.0",
+    "@hapi/vision": "^5.5.2",
+    "bson-ext": "^2.0.2",
+    "hapi-swagger": "^10.0.1",
+    "hapi-swaggered": "^3.0.3",
+    "hapi-swaggered-ui": "^2.6.2",
+    "joi": "^14.3.1",
+    "lodash": "^4.17.11",
+    "mongodb": "^3.2.6"
+  }
+}
