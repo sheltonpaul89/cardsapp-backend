@@ -27,5 +27,9 @@
     "joi": "^14.3.1",
     "lodash": "^4.17.11",
     "mongodb": "^3.2.6"
+  },
+  "devDependencies": {
+    "joi-phone-number": "^3.0.1",
+    "nconf": "^0.10.0"
   }
 }

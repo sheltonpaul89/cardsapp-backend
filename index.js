@@ -12,6 +12,17 @@ const Inert = require('@hapi/inert');
 const Vision = require('@hapi/vision');
 const HapiSwagger = require('hapi-swagger');
 const Pack = require('./package');
+let nconf = require('nconf');
+let CardBands = require('./lib/common/constants').CardBands;
+
+
+nconf.argv().env();
+  if (nconf.get('config')) {
+    let overrides = require(nconf.get('config'));
+    nconf.overrides(overrides);
+  }
+  nconf.defaults(require('./configs/local'));
+  let config = nconf.get();
 
 const init = async () => {
 
@@ -27,7 +38,7 @@ const init = async () => {
             },  
             grouping:'tags',
             cors: true,
-            host: '35.200.142.1'
+            host: config.swagger_host
         };
 
     await server.register([
@@ -192,6 +203,24 @@ const init = async () => {
             handler: (request, h) => RouteHandler.getCards(request, h)
         }
     });
+    
+    server.route({
+        method: 'GET',
+        path: version + '/cards/list',
+        config: {
+            description: 'Gets the List of Available Card Brands',
+            notes: 'Gets the List of Available Card Brands',
+            tags: ['api','cards'],
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'param'
+                }
+            },
+            handler: function (request, h) {
+                return CardBands;
+            }
+        }
+    });
 
     server.route({
         method: 'POST',
@@ -245,7 +274,8 @@ const init = async () => {
                 }
             },
             validate: {
-                params: UserSchema.userIdParam
+                params: UserSchema.userIdParam,
+                query: RequestSchema.GetAllParam
             },
             handler: (request, h) => RouteHandler.getRequests(request, h)
         }
@@ -255,8 +285,8 @@ const init = async () => {
         method: 'GET',
         path: version + '/users/{user_id}/card/requests',
         config: {
-            description: 'Get Requests for the User',
-            notes: 'Get all the Requests for the user',
+            description: 'Get Requests that the user can accept',
+            notes: 'Get Requests that the user can accept',
             tags: ['api','requests'],
             plugins: {
                 'hapi-swagger': {
