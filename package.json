@@ -29,7 +29,9 @@
     "mongodb": "^3.2.6"
   },
   "devDependencies": {
+    "boom": "^7.3.0",
     "joi-phone-number": "^3.0.1",
-    "nconf": "^0.10.0"
+    "nconf": "^0.10.0",
+    "string-format": "^2.0.0"
   }
 }

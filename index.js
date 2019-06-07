@@ -6,7 +6,7 @@ const AddressSchema = require('./lib/schema/address-schema.js');
 const CardSchema = require('./lib/schema/card-schema.js');
 const RequestSchema = require('./lib/schema/request-schema.js');
 
-const RouteHandler = require('./lib/routes/route-handler.js');
+const RouteHandler = require('./lib/handlers/route-handler.js');
 const version = '/v1';
 const Inert = require('@hapi/inert');
 const Vision = require('@hapi/vision');
