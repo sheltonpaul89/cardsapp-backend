@@ -2,6 +2,7 @@
 
 const Hapi = require('@hapi/hapi');
 const UserSchema = require('./lib/schema/user-schema.js');
+const PlanSchema = require('./lib/schema/plan-schema.js');
 const AddressSchema = require('./lib/schema/address-schema.js');
 const CardSchema = require('./lib/schema/card-schema.js');
 const RequestSchema = require('./lib/schema/request-schema.js');
@@ -52,6 +53,79 @@ const init = async () => {
 
     server.route({
         method: 'POST',
+        path: version + '/plans/',
+        config: {
+            description: 'Create Plan ',
+            notes: 'Create a New Plan in the system with the Correct Values',
+            tags: ['api','plan'],
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'json'
+                }
+            },
+            validate: {
+                payload: PlanSchema.PlanCreatePayload
+            },
+            handler: (request, h) => RouteHandler.createPlan(request, h)
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: version + '/plans',
+        config: {
+            description: 'Get All Plans',
+            notes: 'Get all the active Plans in the System',
+            tags: ['api','plan'],
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'param'
+                }
+            },
+            handler: (request, h) => RouteHandler.getPlans(request, h)
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: version + '/plans/{plan_id}/',
+        config: {
+            description: 'Get Plan by Plan ID',
+            notes: 'Get all the Plans for the Plan ID',
+            tags: ['api','plan'],
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'param'
+                }
+            },
+            validate: {
+                params: PlanSchema.PlanIdParam
+            },
+            handler: (request, h) => RouteHandler.getPlanById(request, h)
+        }
+    });
+
+    server.route({
+        method: 'DELETE',
+        path: version + '/plans/{plan_id}/',
+        config: {
+            description: 'Delete Plan by Plan ID',
+            notes: 'Delete all the Plans for the Plan ID',
+            tags: ['api','plan'],
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'param'
+                }
+            },
+            validate: {
+                params: PlanSchema.PlanIdParam
+            },
+            handler: (request, h) => RouteHandler.deletePlanById(request, h)
+        }
+    });
+
+    server.route({
+        method: 'POST',
         path: version + '/users/',
         config: {
             description: 'Create User ',
@@ -66,6 +140,26 @@ const init = async () => {
                 payload: UserSchema.userCreatePayload
             },
             handler: (request, h) => RouteHandler.createUser(request, h)
+        }
+    });
+
+    server.route({
+        method: 'PUT',
+        path: version + '/users/{user_id}/plans/',
+        config: {
+            description: 'Update Plan Id for the User ',
+            notes: 'Update the New User in the system with the Correct Plan Id',
+            tags: ['api','users','plan'],
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'json'
+                }
+            },
+            validate: {
+                payload: PlanSchema.PlanIdParam,
+                params: UserSchema.userIdParam
+            },
+            handler: (request, h) => RouteHandler.updateUserPlan(request, h)
         }
     });
 
@@ -85,6 +179,26 @@ const init = async () => {
                 query: UserSchema.EmailQueryParameter
             },
             handler: (request, h) => RouteHandler.GetUserByParam(request, h)
+        }
+    });
+
+
+    server.route({
+        method: 'GET',
+        path: version + '/users/{user_id}/',
+        config: {
+            description: 'Get User by ID',
+            notes: 'Get User Details by User ID',
+            tags: ['api','users'],
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'param'
+                }
+            },
+            validate: {
+                params: UserSchema.userIdParam
+            },
+            handler: (request, h) => RouteHandler.GetUserById(request, h)
         }
     });
 
