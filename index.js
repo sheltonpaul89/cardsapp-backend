@@ -6,6 +6,7 @@ const PlanSchema = require('./lib/schema/plan-schema.js');
 const AddressSchema = require('./lib/schema/address-schema.js');
 const CardSchema = require('./lib/schema/card-schema.js');
 const RequestSchema = require('./lib/schema/request-schema.js');
+const WalletSchema = require('./lib/schema/wallet-schema.js');
 
 const RouteHandler = require('./lib/handlers/route-handler.js');
 const version = '/v1';
@@ -199,6 +200,65 @@ const init = async () => {
                 params: UserSchema.userIdParam
             },
             handler: (request, h) => RouteHandler.GetUserById(request, h)
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: version + '/users/{user_id}/wallet/balance',
+        config: {
+            description: 'Get Wallet Balance by User ID',
+            notes: 'Get Wallet Details by User ID',
+            tags: ['api','wallet'],
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'param'
+                }
+            },
+            validate: {
+                params: UserSchema.userIdParam
+            },
+            handler: (request, h) => RouteHandler.GetWalletByUserId(request, h)
+        }
+    });
+
+    server.route({
+        method: 'PUT',
+        path: version + '/users/{user_id}/wallet/funds',
+        config: {
+            description: 'Put Funds to a user wallet',
+            notes: 'Update the wallet balance of a user',
+            tags: ['api','wallet'],
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'json'
+                }
+            },
+            validate: {
+                payload: WalletSchema.AmountPayload,
+                params: UserSchema.userIdParam
+            },
+            handler: (request, h) => RouteHandler.addWalletFund(request, h)
+        }
+    });
+
+    server.route({
+        method: 'POST',
+        path: version + '/users/{user_id}/wallet/redeem',
+        config: {
+            description: 'Redeem Funds from a user wallet',
+            notes: 'Update the wallet balance of a user',
+            tags: ['api','wallet'],
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'json'
+                }
+            },
+            validate: {
+                payload: WalletSchema.AmountPayload,
+                params: UserSchema.userIdParam
+            },
+            handler: (request, h) => RouteHandler.redeemWalletFund(request, h)
         }
     });
 
