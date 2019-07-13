@@ -146,6 +146,26 @@ const init = async () => {
 
     server.route({
         method: 'PUT',
+        path: version + '/users/{user_id}/',
+        config: {
+            description: 'Update an Existing User ',
+            notes: 'Update an Existing User in the system with the Correct Values',
+            tags: ['api','users'],
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'json'
+                }
+            },
+            validate: {
+                payload: UserSchema.userCreatePayload,
+                params: UserSchema.userIdParam
+            },
+            handler: (request, h) => RouteHandler.updateUser(request, h)
+        }
+    });
+
+    server.route({
+        method: 'PUT',
         path: version + '/users/{user_id}/plans/',
         config: {
             description: 'Update Plan Id for the User ',
