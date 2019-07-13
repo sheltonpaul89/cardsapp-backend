@@ -455,6 +455,26 @@ const init = async () => {
         }
     });
 
+    server.route({
+        method: 'GET',
+        path: version + '/users/{user_id}/requests/accepted',
+        config: {
+            description: 'Get the Accepted Requests for the User',
+            notes: 'Get all the Accepted Requests for the user',
+            tags: ['api','requests'],
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'param'
+                }
+            },
+            validate: {
+                params: UserSchema.userIdParam,
+                query: RequestSchema.GetAllParam
+            },
+            handler: (request, h) => RouteHandler.getAcceptedRequests(request, h)
+        }
+    });
+
      server.route({
         method: 'GET',
         path: version + '/users/{user_id}/card/requests',
