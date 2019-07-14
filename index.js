@@ -456,6 +456,46 @@ const init = async () => {
     });
 
     server.route({
+        method: 'PUT',
+        path: version + '/requests/{request_id}/payment/transaction',
+        config: {
+            description: 'Update an Payment Transaction ID for the request',
+            notes: 'Update an Payment Transaction ID for the request',
+            tags: ['api','requests'],
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'json'
+                }
+            },
+            validate: {
+                payload: RequestSchema.TransactionIdParam,
+                params: RequestSchema.RequestIdParam
+            },
+            handler: (request, h) => RouteHandler.updatePaymentTransaction(request, h)
+        }
+    });
+
+    server.route({
+        method: 'PUT',
+        path: version + '/requests/{request_id}/servicer/payment/account',
+        config: {
+            description: 'Update an Payment Transaction ID for the request',
+            notes: 'Update an Payment Transaction ID for the request',
+            tags: ['api','requests'],
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'json'
+                }
+            },
+            validate: {
+                payload: RequestSchema.ServicerBankAccountPayload,
+                params: RequestSchema.RequestIdParam
+            },
+            handler: (request, h) => RouteHandler.updateServicerAccountDetails(request, h)
+        }
+    });
+
+    server.route({
         method: 'GET',
         path: version + '/users/{user_id}/requests',
         config: {
