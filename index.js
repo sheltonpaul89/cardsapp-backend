@@ -457,6 +457,28 @@ const init = async () => {
 
     server.route({
         method: 'PUT',
+        path: version + '/requests/{request_id}/status',
+        config: {
+            description: 'Update an Existing Request to any of the Statuses - Purchased,Closed,Cancelled',
+            notes: 'Update an Existing Request to any of the Statuses - Purchased,Closed,Cancelled',
+            tags: ['api','requests'],
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'json'
+                }
+            },
+            validate: {
+                payload: RequestSchema.RequestStatusPayload,
+                params: RequestSchema.RequestIdParam
+            },
+            handler: (request, h) => RouteHandler.updateRequestStatus(request, h)
+        }
+    });
+
+    
+
+    server.route({
+        method: 'PUT',
         path: version + '/requests/{request_id}/payment/transaction',
         config: {
             description: 'Update an Payment Transaction ID for the request',
