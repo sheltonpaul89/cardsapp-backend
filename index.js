@@ -1,13 +1,14 @@
 'use strict';
 
 const Hapi = require('@hapi/hapi');
+const Good = require('good');
 const UserSchema = require('./lib/schema/user-schema.js');
 const PlanSchema = require('./lib/schema/plan-schema.js');
 const AddressSchema = require('./lib/schema/address-schema.js');
 const CardSchema = require('./lib/schema/card-schema.js');
 const RequestSchema = require('./lib/schema/request-schema.js');
 const WalletSchema = require('./lib/schema/wallet-schema.js');
-
+const FCMSchema = require('./lib/schema/fcm-schema.js');
 const RouteHandler = require('./lib/handlers/route-handler.js');
 const version = '/v1';
 const Inert = require('@hapi/inert');
@@ -16,6 +17,7 @@ const HapiSwagger = require('hapi-swagger');
 const Pack = require('./package');
 let nconf = require('nconf');
 let CardBands = require('./lib/common/constants').CardBands;
+let Joi = require('joi');
 
 
 nconf.argv().env();
@@ -595,6 +597,24 @@ const init = async () => {
         }
     });
 
+    server.route({
+        method: 'POST',
+        path: version + '/fcm/send',
+        config: {
+            description: 'Send an FCM request',
+            notes: 'Sends an FCM request to a particular device',
+            tags: ['api','fcm'],
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'json'
+                }
+            },
+            validate: {
+                query: FCMSchema.FCMPayload
+            },
+            handler: (request, h) => RouteHandler.sendFCMMessage(request, h)
+        }
+    });
     await server.start();
     console.log('Server running on %s', server.info.uri);
 };
