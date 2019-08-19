@@ -17,8 +17,7 @@ const HapiSwagger = require('hapi-swagger');
 const Pack = require('./package');
 let nconf = require('nconf');
 let CardBands = require('./lib/common/constants').CardBands;
-let Joi = require('joi');
-
+let CompanyBankDetails = require('./lib/common/constants').CompanyBankDetails;
 
 nconf.argv().env();
   if (nconf.get('config')) {
@@ -417,6 +416,26 @@ const init = async () => {
             }
         }
     });
+
+
+    server.route({
+        method: 'GET',
+        path: version + '/company/bank-details',
+        config: {
+            description: 'Gets the bank account details of the company',
+            notes: 'Gets the bank account details of the company',
+            tags: ['api','cards'],
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'param'
+                }
+            },
+            handler: function (request, h) {
+                return CompanyBankDetails;
+            }
+        }
+    });
+    CompanyBankDetails
 
     server.route({
         method: 'POST',
