@@ -9,6 +9,7 @@ const CardSchema = require('./lib/schema/card-schema.js');
 const RequestSchema = require('./lib/schema/request-schema.js');
 const WalletSchema = require('./lib/schema/wallet-schema.js');
 const FCMSchema = require('./lib/schema/fcm-schema.js');
+const OTPSchema = require('./lib/schema/otp-schema.js');
 const RouteHandler = require('./lib/handlers/route-handler.js');
 const version = '/v1';
 const Inert = require('@hapi/inert');
@@ -634,6 +635,46 @@ const init = async () => {
             handler: (request, h) => RouteHandler.sendFCMMessage(request, h)
         }
     });
+
+
+    server.route({
+        method: 'POST',
+        path: version + '/otp/send',
+        config: {
+            description: 'Send OTP to the Phone Number',
+            notes: 'Sends OTP request to the Phone Number',
+            tags: ['api','otp'],
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'json'
+                }
+            },
+            validate: {
+                payload: OTPSchema.phoneNumberPayload
+            },
+            handler: (request, h) => RouteHandler.sendOTP(request, h)
+        }
+    });
+
+    server.route({
+        method: 'POST',
+        path: version + '/otp/verify',
+        config: {
+            description: 'Validate the OTP',
+            notes: 'Validate the OTP',
+            tags: ['api','otp'],
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'json'
+                }
+            },
+            validate: {
+                payload: OTPSchema.otpPayload
+            },
+            handler: (request, h) => RouteHandler.verifyOTP(request, h)
+        }
+    });
+
     await server.start();
     console.log('Server running on %s', server.info.uri);
 };
