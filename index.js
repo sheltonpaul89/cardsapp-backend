@@ -19,6 +19,7 @@ const Pack = require('./package');
 let nconf = require('nconf');
 let CardBands = require('./lib/common/constants').CardBands;
 let CompanyBankDetails = require('./lib/common/constants').CompanyBankDetails;
+let logger = require('./lib/handlers/log-handler').logger;
 
 nconf.argv().env();
   if (nconf.get('config')) {
@@ -32,7 +33,15 @@ const init = async () => {
 
     const server = Hapi.server({
         port: 3000,
-        host: 'localhost'
+        host: 'localhost',
+        routes: {
+            validate: {
+                failAction: async (request, h, err) => {
+                        logger.info("Joi Validation Error ",err);
+                        throw err;
+                    }
+            }
+        }
     });
 
     const swaggerOptions = {
