@@ -659,7 +659,7 @@ const init = async () => {
                 }
             },
             validate: {
-                payload: OTPSchema.phoneNumberPayload
+                payload: OTPSchema.otpInputPayload
             },
             handler: (request, h) => RouteHandler.sendOTP(request, h)
         }
