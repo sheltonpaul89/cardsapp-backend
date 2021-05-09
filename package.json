@@ -28,7 +28,7 @@
     "hapi-swaggered": "^3.0.3",
     "hapi-swaggered-ui": "^2.6.2",
     "joi": "^14.3.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "mongodb": "^3.2.6",
     "nodemailer": "^6.3.0",
     "r2": "^2.0.1",
